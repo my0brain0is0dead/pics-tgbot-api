@@ -1,29 +1,13 @@
 const TelegramApi = require('node-telegram-bot-api')
-const token = ''
+const token = '6654435491:AAHw8WWSFwWt9W0TrtLMeMpt7id09lTWeM8'
 const bot = new TelegramApi(token, {polling: true})
+const request = require('request')
 
 const {gameOptions, againOptions} = require('./options.js')
 const {images, responses} = require('./data.js')
-// const axios = require('axios').default
-
 
 const numberData = {}
 
-/*
-function getPicture () {
-    let pictureLink = ''
-    axios
-        .get('https://api.waifu.pics/nsfw/waifu')
-        .then((response) => {
-            pictureLink = response.data.url
-            return pictureLink
-        })
-        .catch((error) => {
-            console.error(error.message)
-            return ''
-        })
-}
-*/
 
 const getRandomInt = (min, max) => {
     min = Math.ceil(min);
@@ -38,8 +22,20 @@ const startGame = async (chatId) => {
     await bot.sendMessage(chatId, 'Отгадывай пожалуйста!', gameOptions)
 }
 
-const startApp = () => {
+function getPicture (chatId) {
+    request('https://api.waifu.pics/nsfw/waifu', (error, response, body) => {
+        try {
+            const responseBody = JSON.parse(body)
+            const imageUrl = responseBody.url
+            bot.sendPhoto(chatId, imageUrl)
+        } catch {
+            console.error('Error parsing JSON or extracting image URL:', error)
+        }
+    })
+}
 
+const startApp = () => {
+    
     bot.setMyCommands([
         {command: "/start", description:"Приветствие"},
         {command: "/info", description: "Информация о пользователе"},
@@ -50,25 +46,19 @@ const startApp = () => {
         {command: "/templar assasin", description: "Картинка с Ланаей"},
         {command: "/vengeful spirit", description: "Картинка с Шендельзар"},
     ])
-
     bot.on('message', async msg => {
         const text = msg.text
         const chatId = msg.chat.id
-    
-        if (text === '/start') {
-            await bot.sendPhoto(chatId, images.juggernaut)
-            return bot.sendMessage(chatId, responses.start)
-        }
-        if (text === '/info') {
-            return bot.sendMessage(chatId, `Тебя зовут ${msg.from.first_name}`)
-        }
-        if (text === '/commands') {
-            return bot.sendMessage(chatId, responses.commands) 
-        }
-        if (text === '/game') {
-            return startGame(chatId)
-        }
+
         switch (text) {
+            case '/start': {
+                await bot.sendPhoto(chatId, images.juggernaut)
+                return bot.sendMessage(chatId, responses.start)
+            }
+            case '/info': return bot.sendMessage(chatId, `Тебя зовут ${msg.from.first_name}`)
+            case '/commands': return bot.sendMessage(chatId, responses.commands)
+            case '/game': return startGame(chatId)
+            case '/pic': return getPicture(chatId)
             case '/windranger': return bot.sendPhoto(chatId, images.WR)
             case '/drow_ranger': return bot.sendPhoto(chatId, images.DR)      
             case '/lina': return bot.sendPhoto(chatId, images.lina)
