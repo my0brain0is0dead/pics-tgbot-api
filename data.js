@@ -10,7 +10,8 @@ module.exports = {
 
     responses: {
         start:'Добро пожаловать. /commands для просмотра доступных команд',
-        commands:'Доступные команды:\r\n/windranger\r\n/drow_ranger\r\n/lina\r\n/templar_assasin\r\n/vengeful_spirit\r\n/game',
+        commands:'Доступные команды:\r\n/info\r\n/game\r\n/hent (хентайчик)\r\n/windranger\r\n/drow_ranger\r\n/lina\r\n/templar_assasin\r\n/vengeful_spirit\r\n',
         guess_right:'Поздравляю, ты отгадал цифру!'
-    }
+    },
+    token:''
 }

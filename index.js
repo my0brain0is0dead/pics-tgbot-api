@@ -1,14 +1,10 @@
 const TelegramApi = require('node-telegram-bot-api')
-const token = '6654435491:AAHw8WWSFwWt9W0TrtLMeMpt7id09lTWeM8'
-const bot = new TelegramApi(token, {polling: true})
 const request = require('request')
-
 const {gameOptions, againOptions} = require('./options.js')
-const {images, responses} = require('./data.js')
+const {images, responses, token} = require('./data.js')
+const bot = new TelegramApi(token, {polling: true})
 
 const numberData = {}
-
-
 const getRandomInt = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -23,11 +19,11 @@ const startGame = async (chatId) => {
 }
 
 function getPicture (chatId) {
-    request('https://api.waifu.pics/nsfw/waifu', (error, response, body) => {
+    request('https://api.waifu.pics/nsfw/waifu', async (error, response, body) => {
         try {
             const responseBody = JSON.parse(body)
             const imageUrl = responseBody.url
-            bot.sendPhoto(chatId, imageUrl)
+            await bot.sendPhoto(chatId, imageUrl)
         } catch {
             console.error('Error parsing JSON or extracting image URL:', error)
         }
@@ -40,6 +36,7 @@ const startApp = () => {
         {command: "/start", description:"Приветствие"},
         {command: "/info", description: "Информация о пользователе"},
         {command: "/game", description:'Игра "Угадай цифру"'},
+        {command: "/hent", description:"Хентай"},
         {command: "/windranger", description: "Картинка с Лиралей"},
         {command: "/drow ranger", description: "Картинка с Траксекс"},
         {command: "/lina", description: "Картинка с Линой"},
@@ -58,7 +55,7 @@ const startApp = () => {
             case '/info': return bot.sendMessage(chatId, `Тебя зовут ${msg.from.first_name}`)
             case '/commands': return bot.sendMessage(chatId, responses.commands)
             case '/game': return startGame(chatId)
-            case '/pic': return getPicture(chatId)
+            case '/hent': return getPicture(chatId)
             case '/windranger': return bot.sendPhoto(chatId, images.WR)
             case '/drow_ranger': return bot.sendPhoto(chatId, images.DR)      
             case '/lina': return bot.sendPhoto(chatId, images.lina)
