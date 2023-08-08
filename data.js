@@ -11,7 +11,19 @@ module.exports = {
     responses: {
         start:'Добро пожаловать. /commands для просмотра доступных команд',
         commands:'Доступные команды:\r\n/info\r\n/game\r\n/hent (хентайчик)\r\n/windranger\r\n/drow_ranger\r\n/lina\r\n/templar_assasin\r\n/vengeful_spirit\r\n',
-        guess_right:'Поздравляю, ты отгадал цифру!'
+        guess_right:'Поздравляю, ты отгадал цифру!',
+        try_guess:'Я загадал цифру от 1 до 3, попробуй отгадать'
     },
+    commands_descriptions:[
+        {command: "/start", description:"Приветствие"},
+        {command: "/info", description: "Информация о пользователе"},
+        {command: "/game", description:'Игра "Угадай цифру"'},
+        {command: "/hent", description:"Хентай"},
+        {command: "/windranger", description: "Картинка с Лиралей"},
+        {command: "/drow ranger", description: "Картинка с Траксекс"},
+        {command: "/lina", description: "Картинка с Линой"},
+        {command: "/templar assasin", description: "Картинка с Ланаей"},
+        {command: "/vengeful spirit", description: "Картинка с Шендельзар"},
+    ],
     token:''
 }
